@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .calculator-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .calculator-container h1 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e7f5e9;
+            border: 1px solid #b7dfc2;
+            border-radius: 5px;
+            display: none;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>Solar Calculator</h1>
+        <div class="input-group">
+            <label for="city">City</label>
+            <input type="text" id="city" placeholder="Enter your city">
+        </div>
+        <div class="input-group">
+            <label for="state">State</label>
+            <input type="text" id="state" placeholder="Enter your state">
+        </div>
+        <div class="input-group">
+            <label for="bill">Monthly Electricity Bill (₹)</label>
+            <input type="number" id="bill" placeholder="Enter your bill">
+        </div>
+        <div class="input-group">
+            <label for="usage">Usage Type</label>
+            <select id="usage">
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial</option>
+                <option value="industrial">Industrial</option>
+            </select>
+        </div>
+        <button class="btn" onclick="calculateSolarSystem()">Calculate</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateSolarSystem() {
+            const bill = parseFloat(document.getElementById('bill').value);
+            const usage = document.getElementById('usage').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+
+            if (!bill || !city || !state || !usage) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Define assumptions
+            const avgSolarHours = 5; // Average sunlight hours per day
+            let tariffRate;
+
+            // Approximate tariff rates (₹/kWh) based on usage type
+            if (usage === 'residential') {
+                tariffRate = 8;
+            } else if (usage === 'commercial') {
+                tariffRate = 10;
+            } else {
+                tariffRate = 12;
+            }
+
+            // Calculate solar system size
+            const systemSize = (bill / (tariffRate * avgSolarHours * 30)).toFixed(2);
+
+            // Display result
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <strong>City:</strong> ${city}<br>
+                <strong>State:</strong> ${state}<br>
+                <strong>Monthly Bill:</strong> ₹${bill}<br>
+                <strong>Usage Type:</strong> ${usage.charAt(0).toUpperCase() + usage.slice(1)}<br>
+                <strong>Recommended Solar System Size:</strong> ${systemSize} kW
+            `;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
